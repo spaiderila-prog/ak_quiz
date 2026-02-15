@@ -730,11 +730,12 @@
       }
 
       .mobile-header-row {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr) auto;
+        display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        min-height: 34px;
         margin-bottom: 8px;
+        position: relative;
       }
 
       .mobile-mode-trigger {
@@ -750,20 +751,25 @@
         font-weight: 700;
         font-size: .78rem;
         white-space: nowrap;
+        width: 100%;
+        text-align: center;
       }
 
       .title {
         margin: 0;
         font-size: clamp(1.12rem, 6.1vw, 1.52rem);
         min-height: 1.18em;
+        width: 100%;
+        text-align: center;
+        padding-inline: 42px;
       }
 
       .mobile-hint-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        position: static;
-        right: auto;
+        position: absolute;
+        right: 0;
         width: 32px;
         min-width: 32px;
         height: 32px;
@@ -784,6 +790,13 @@
         backdrop-filter: blur(3px);
         padding: 10px;
         margin-bottom: 10px;
+        position: fixed;
+        left: calc(8px + env(safe-area-inset-left));
+        right: calc(8px + env(safe-area-inset-right));
+        bottom: calc(74px + env(safe-area-inset-bottom));
+        z-index: 9;
+        max-height: min(52dvh, 420px);
+        overflow: auto;
       }
 
       .modes {
@@ -844,11 +857,24 @@
         padding: 8px 6px;
       }
 
+      .mode-pill {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255,255,255,.2);
+        background: rgba(255,255,255,.09);
+        color: #f3f7ff;
+        font-weight: 700;
+        font-size: .82rem;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
       .grid {
         grid-template-columns: 1fr;
         gap: 5px;
-        width: min(100%, 760px);
-        margin-inline: auto;
+        width: 100%;
+        margin: 0;
       }
 
       .card {
@@ -856,13 +882,14 @@
         border: 0;
         aspect-ratio: 16 / 6.4;
         max-height: min(18dvh, 122px);
+        width: 100%;
         background: transparent;
         box-shadow: none;
       }
 
       .card img {
         object-fit: cover;
-        object-position: center;
+        object-position: center center;
         background: transparent;
       }
 
@@ -976,6 +1003,10 @@
         left: calc(8px + env(safe-area-inset-left));
         right: calc(8px + env(safe-area-inset-right));
       }
+      .mobile-mode-menu {
+        left: calc(8px + env(safe-area-inset-left));
+        right: calc(8px + env(safe-area-inset-right));
+      }
       .theory-modal {
         padding-top: 62px;
       }
@@ -988,7 +1019,6 @@
 <body>
   <main class="app">
     <div class="mobile-header-row">
-      <button class="mobile-mode-trigger" id="mobileModeTrigger" type="button">Обучение</button>
       <h1 class="title" id="question">Загрузка…</h1>
       <button class="hint-btn mobile-hint-btn" id="mobileHintBtn" type="button" aria-label="Подсказка">?</button>
     </div>
@@ -1038,7 +1068,8 @@
         </div>
 
         <div class="controls">
-          <div class="pill">Раунд: <span id="round">0</span></div>
+          <div class="pill hidden" id="roundPill">Раунд: <span id="round">0</span></div>
+          <button class="pill mode-pill hidden" id="mobileModeTrigger" type="button">Обучение</button>
           <div class="pill" id="scorePill">Верно: <span id="score">0 из 0</span></div>
           <div class="pill hidden" id="timerPill">Таймер: <span id="timer">0</span>с</div>
         </div>
@@ -1326,6 +1357,7 @@
     const $answers = document.getElementById("answers");
     const $wrongHint = document.getElementById("wrongHint");
     const $round = document.getElementById("round");
+    const $roundPill = document.getElementById("roundPill");
     const $scorePill = document.getElementById("scorePill");
     const $score = document.getElementById("score");
     const $fastOptions = document.getElementById("fastOptions");
@@ -1647,8 +1679,11 @@
     function syncMobileControls() {
       const fast = mode === "fast";
       const theory = mode === "theory";
+      const mobile = isMobileViewport();
       $mobileFastWrap.classList.toggle("hidden", !fast);
       $mobileHintBtn.classList.toggle("hidden", fast || theory);
+      $mobileModeTrigger.classList.toggle("hidden", !mobile);
+      $roundPill.classList.toggle("hidden", mobile);
       $mobileModeFast.classList.toggle("active", fast);
       $mobileModeLearn.classList.toggle("active", mode === "learn");
       $mobileModeDesc.classList.toggle("active", mode === "desc");
