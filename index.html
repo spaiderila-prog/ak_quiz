@@ -623,6 +623,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity .14s ease;
+      overscroll-behavior: contain;
     }
 
     .zoom-view.show {
@@ -811,6 +812,15 @@
         overflow: auto;
       }
 
+      .mobile-mode-menu.from-top {
+        top: calc(44px + env(safe-area-inset-top));
+        bottom: auto;
+        left: calc(8px + env(safe-area-inset-left));
+        right: auto;
+        width: min(320px, calc(100vw - 16px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+        max-height: min(58dvh, 460px);
+      }
+
       .modes {
         width: 100%;
         display: grid;
@@ -852,7 +862,7 @@
         bottom: calc(8px + env(safe-area-inset-bottom));
         z-index: 6;
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
         margin: 0;
         padding: 6px;
@@ -860,13 +870,16 @@
         border: 1px solid rgba(255,255,255,.12);
         background: rgba(15,18,24,.82);
         backdrop-filter: blur(4px);
-        font-size: .84rem;
+        font-size: .76rem;
       }
 
       .pill {
         width: 100%;
         text-align: center;
-        padding: 8px 6px;
+        padding: 6px 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .mode-pill {
@@ -877,14 +890,14 @@
         background: rgba(255,255,255,.09);
         color: #f3f7ff;
         font-weight: 700;
-        font-size: .82rem;
+        font-size: .74rem;
         border-radius: 999px;
         cursor: pointer;
       }
 
       .grid {
         grid-template-columns: 1fr;
-        gap: 5px;
+        gap: 7px;
         width: 100%;
         margin: 0;
       }
@@ -892,8 +905,8 @@
       .card {
         border-radius: 0;
         border: 0;
-        aspect-ratio: 16 / 6.4;
-        max-height: min(18dvh, 122px);
+        aspect-ratio: 16 / 7.2;
+        max-height: min(20dvh, 136px);
         width: 100%;
         background: transparent;
         box-shadow: none;
@@ -901,7 +914,7 @@
 
       .card img {
         object-fit: cover;
-        object-position: center center;
+        object-position: center 58%;
         background: transparent;
       }
 
@@ -1012,10 +1025,6 @@
         padding-bottom: calc(78px + env(safe-area-inset-bottom));
       }
       .controls {
-        left: calc(8px + env(safe-area-inset-left));
-        right: calc(8px + env(safe-area-inset-right));
-      }
-      .mobile-mode-menu {
         left: calc(8px + env(safe-area-inset-left));
         right: calc(8px + env(safe-area-inset-right));
       }
@@ -1444,6 +1453,7 @@
     let zoomImages = [];
     let zoomImageIndex = 0;
     let zoomTouchStartX = null;
+    let zoomTouchStartY = null;
     const weaponImageCursor = new Map();
     const modeOrder = ["fast", "learn", "desc", "theory"];
     const mobileMediaQuery = window.matchMedia("(max-width: 880px)");
@@ -1694,6 +1704,7 @@
       const fast = mode === "fast";
       const theory = mode === "theory";
       const mobile = isMobileViewport();
+      $mobileModeMenu.classList.toggle("from-top", theory);
       $mobileFastWrap.classList.toggle("hidden", !fast);
       $mobileHintBtn.classList.toggle("hidden", fast || theory);
       $mobileModeTrigger.classList.toggle("hidden", !mobile || theory);
@@ -1706,12 +1717,9 @@
       $mobileFastMinute.classList.toggle("active", fastVariant === "minute");
       $mobileFastClassic.classList.toggle("active", fastVariant === "classic");
       $mobileFastSudden.classList.toggle("active", fastVariant === "sudden");
-      let label = modeLabelMap[mode] || "Обучение";
-      if (fast) {
-        label = `${modeLabelMap[mode] || "На скорость"} · ${fastVariantLabelMap[fastVariant] || "За минуту"}`;
-      }
+      const label = modeLabelMap[mode] || "Обучение";
       $mobileModeTrigger.textContent = label;
-      $mobileModeTop.textContent = label;
+      $mobileModeTop.textContent = "Теория";
     }
 
     function setTheoryHeadline() {
@@ -2147,12 +2155,24 @@
       $zoomView.addEventListener("touchstart", (event) => {
         if (!$zoomView.classList.contains("show")) return;
         zoomTouchStartX = event.changedTouches[0].clientX;
+        zoomTouchStartY = event.changedTouches[0].clientY;
       }, { passive: true });
+      $zoomView.addEventListener("touchmove", (event) => {
+        if (!$zoomView.classList.contains("show") || zoomTouchStartX === null || zoomTouchStartY === null) return;
+        const moveX = event.changedTouches[0].clientX;
+        const moveY = event.changedTouches[0].clientY;
+        const dx = Math.abs(moveX - zoomTouchStartX);
+        const dy = Math.abs(moveY - zoomTouchStartY);
+        if (dx > dy) {
+          event.preventDefault();
+        }
+      }, { passive: false });
       $zoomView.addEventListener("touchend", (event) => {
-        if (!$zoomView.classList.contains("show") || zoomTouchStartX === null) return;
+        if (!$zoomView.classList.contains("show") || zoomTouchStartX === null || zoomTouchStartY === null) return;
         const endX = event.changedTouches[0].clientX;
         const deltaX = endX - zoomTouchStartX;
         zoomTouchStartX = null;
+        zoomTouchStartY = null;
         if (Math.abs(deltaX) < 40) return;
         if (deltaX < 0) cycleZoomImage(1);
         else cycleZoomImage(-1);
