@@ -792,6 +792,9 @@
         justify-content: center;
         position: absolute;
         left: 0;
+        width: auto;
+        max-width: 40vw;
+        padding: 6px 10px;
       }
 
       .mobile-mode-menu {
@@ -1723,10 +1726,7 @@
     }
 
     function setTheoryHeadline() {
-      const weapon = weapons[randomInt(weapons.length)];
-      if (weapon && weapon.name) {
-        $question.textContent = weapon.name;
-      }
+      $question.textContent = "ТЕОРИЯ";
     }
 
     function openTheoryModal() {
