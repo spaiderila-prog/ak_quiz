@@ -767,7 +767,7 @@
         min-height: 100dvh;
         height: 100dvh;
         overflow: hidden;
-        padding: calc(8px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom));
+        padding: calc(8px + env(safe-area-inset-top)) 2px calc(8px + env(safe-area-inset-bottom));
         border-radius: 0;
       }
 
@@ -781,7 +781,7 @@
         align-items: center;
         justify-content: center;
         min-height: 34px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         position: relative;
       }
 
@@ -916,8 +916,8 @@
 
       .controls {
         position: fixed;
-        left: calc(10px + env(safe-area-inset-left));
-        right: calc(10px + env(safe-area-inset-right));
+        left: calc(6px + env(safe-area-inset-left));
+        right: calc(6px + env(safe-area-inset-right));
         bottom: calc(6px + env(safe-area-inset-bottom));
         z-index: 6;
         display: grid;
@@ -956,7 +956,7 @@
 
       .grid {
         grid-template-columns: 1fr;
-        gap: 4px;
+        gap: 2px;
         width: 100%;
         margin: 0;
       }
@@ -979,21 +979,21 @@
       }
 
       .card img {
-        object-fit: cover;
-        object-position: center 46%;
+        object-fit: contain;
+        object-position: center center;
         background: linear-gradient(180deg, #141b2a, #0f1523);
-        transform: scale(.9);
+        transform: scale(1);
         transform-origin: center center;
       }
 
       .card img.ak104-main-crop {
         object-position: center center;
-        transform: scale(1.06);
+        transform: scale(1);
       }
 
       .card img.ak102-main-crop {
-        object-position: center 36%;
-        transform: scale(1.08);
+        object-position: center center;
+        transform: scale(1);
       }
 
       .card:hover {
@@ -1096,15 +1096,15 @@
       .desc-grid { grid-template-columns: 1fr; }
       .theory-grid { grid-template-columns: 1fr; }
       .app {
-        padding: calc(8px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom));
+        padding: calc(8px + env(safe-area-inset-top)) 2px calc(8px + env(safe-area-inset-bottom));
         min-height: 100dvh;
       }
       .content-shell {
         padding-bottom: calc(66px + env(safe-area-inset-bottom));
       }
       .controls {
-        left: calc(8px + env(safe-area-inset-left));
-        right: calc(8px + env(safe-area-inset-right));
+        left: calc(4px + env(safe-area-inset-left));
+        right: calc(4px + env(safe-area-inset-right));
       }
       .theory-modal {
         padding-top: 62px;
