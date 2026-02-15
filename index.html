@@ -112,6 +112,13 @@
       background: #0a0d13;
     }
 
+    .card img.ak104-main-crop {
+      object-fit: cover;
+      object-position: center center;
+      transform: scale(1.12);
+      transform-origin: center center;
+    }
+
     .card.correct {
       border-color: var(--ok);
       box-shadow: 0 0 0 3px rgba(31,157,85,.35) inset;
@@ -972,6 +979,11 @@
         transform-origin: center center;
       }
 
+      .card img.ak104-main-crop {
+        object-position: center center;
+        transform: scale(1.06);
+      }
+
       .card:hover {
         transform: none;
         box-shadow: none;
@@ -1562,6 +1574,10 @@
       return [weapon.image];
     }
 
+    function getCardImageExtraClass(imageSrc) {
+      return imageSrc === "quiz_assets_ak/image11.png" ? " ak104-main-crop" : "";
+    }
+
     function escapeHtml(text) {
       return text
         .replaceAll("&", "&amp;")
@@ -2148,9 +2164,11 @@
           card.className = "card";
           card.type = "button";
           card.dataset.correct = String(idx === correctIndex);
+          const imageSrc = optionImageByIndex.get(idx) || weapon.image;
+          const imageExtraClass = getCardImageExtraClass(imageSrc);
 
           card.innerHTML = `
-            <img src="${optionImageByIndex.get(idx) || weapon.image}" alt="${weapon.name}" loading="lazy" />
+            <img class="${imageExtraClass.trim()}" src="${imageSrc}" alt="${weapon.name}" loading="lazy" />
             <div class="card-wrong-overlay">${weapon.name}</div>
           `;
 
