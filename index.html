@@ -1723,6 +1723,17 @@
       const label = modeLabelMap[mode] || "Обучение";
       $mobileModeTrigger.textContent = label;
       $mobileModeTop.textContent = "Теория";
+
+      if (mobile) {
+        const controls = $scorePill.parentElement;
+        if (controls && mode === "fast") {
+          if ($timerPill.nextElementSibling !== $scorePill) {
+            controls.insertBefore($timerPill, $scorePill);
+          }
+        } else if (controls && $scorePill.nextElementSibling !== $timerPill) {
+          controls.insertBefore($scorePill, $timerPill);
+        }
+      }
     }
 
     function setTheoryHeadline() {
