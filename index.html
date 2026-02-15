@@ -714,19 +714,25 @@
     }
 
     @media (max-width: 880px) {
+      html,
+      body {
+        height: 100dvh;
+        overscroll-behavior: none;
+      }
+
       body {
         display: block;
         min-height: 100dvh;
-        padding: calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
-        overflow-y: auto;
+        padding: 0;
+        overflow: hidden;
       }
 
       .app {
-        min-height: calc(100dvh - 12px);
-        height: auto;
-        overflow: visible;
-        padding: 10px 8px 10px;
-        border-radius: 16px;
+        min-height: 100dvh;
+        height: 100dvh;
+        overflow: hidden;
+        padding: calc(8px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom));
+        border-radius: 0;
       }
 
       .top-row,
@@ -852,10 +858,18 @@
       }
 
       .content-shell {
-        min-height: auto;
-        overflow: visible;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
         padding-right: 0;
         padding-bottom: calc(74px + env(safe-area-inset-bottom));
+      }
+
+      #quizSection {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
       }
 
       .controls {
@@ -900,24 +914,31 @@
 
       .grid {
         grid-template-columns: 1fr;
-        gap: 8px;
+        gap: 6px;
         width: 100%;
         margin: 0;
+      }
+
+      #answers.grid:not(.desc-grid) {
+        flex: 1 1 auto;
+        min-height: 0;
+        grid-template-rows: repeat(4, minmax(0, 1fr));
       }
 
       .card {
         border-radius: 0;
         border: 0;
-        aspect-ratio: 16 / 7;
-        max-height: min(22dvh, 152px);
+        aspect-ratio: auto;
+        max-height: none;
+        height: 100%;
         width: 100%;
         background: transparent;
         box-shadow: none;
       }
 
       .card img {
-        object-fit: contain;
-        object-position: center center;
+        object-fit: cover;
+        object-position: center 40%;
         background: linear-gradient(180deg, #141b2a, #0f1523);
       }
 
@@ -1021,8 +1042,8 @@
       .desc-grid { grid-template-columns: 1fr; }
       .theory-grid { grid-template-columns: 1fr; }
       .app {
-        padding: 12px 8px 12px;
-        min-height: calc(100dvh - 24px);
+        padding: calc(8px + env(safe-area-inset-top)) 6px calc(8px + env(safe-area-inset-bottom));
+        min-height: 100dvh;
       }
       .content-shell {
         padding-bottom: calc(78px + env(safe-area-inset-bottom));
