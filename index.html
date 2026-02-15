@@ -807,13 +807,14 @@
       }
 
       .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
+        grid-template-columns: 1fr;
+        gap: 6px;
       }
 
       .card {
         border-radius: 10px;
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 16 / 7;
+        max-height: min(17dvh, 118px);
       }
 
       .card img {
@@ -910,7 +911,7 @@
     }
 
     @media (max-width: 680px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
       .desc-grid { grid-template-columns: 1fr; }
       .theory-grid { grid-template-columns: 1fr; }
       .app {
