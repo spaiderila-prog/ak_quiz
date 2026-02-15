@@ -119,6 +119,13 @@
       transform-origin: center center;
     }
 
+    .card img.ak102-main-crop {
+      object-fit: cover;
+      object-position: center 35%;
+      transform: scale(1.14);
+      transform-origin: center center;
+    }
+
     .card.correct {
       border-color: var(--ok);
       box-shadow: 0 0 0 3px rgba(31,157,85,.35) inset;
@@ -984,6 +991,11 @@
         transform: scale(1.06);
       }
 
+      .card img.ak102-main-crop {
+        object-position: center 36%;
+        transform: scale(1.08);
+      }
+
       .card:hover {
         transform: none;
         box-shadow: none;
@@ -1575,7 +1587,10 @@
     }
 
     function getCardImageExtraClass(imageSrc) {
-      return imageSrc === "quiz_assets_ak/image11.png" ? " ak104-main-crop" : "";
+      const classes = [];
+      if (imageSrc === "quiz_assets_ak/image11.png") classes.push("ak104-main-crop");
+      if (imageSrc === "quiz_assets_ak/image9.png") classes.push("ak102-main-crop");
+      return classes.join(" ");
     }
 
     function escapeHtml(text) {
@@ -2168,7 +2183,7 @@
           const imageExtraClass = getCardImageExtraClass(imageSrc);
 
           card.innerHTML = `
-            <img class="${imageExtraClass.trim()}" src="${imageSrc}" alt="${weapon.name}" loading="lazy" />
+            <img class="${imageExtraClass}" src="${imageSrc}" alt="${weapon.name}" loading="lazy" />
             <div class="card-wrong-overlay">${weapon.name}</div>
           `;
 
