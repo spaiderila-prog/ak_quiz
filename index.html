@@ -947,15 +947,15 @@
       #answers.grid:not(.desc-grid) {
         flex: 1 1 auto;
         min-height: 0;
-        grid-template-rows: repeat(4, minmax(0, 1fr));
+        align-content: start;
       }
 
       .card {
         border-radius: 0;
         border: 0;
-        aspect-ratio: auto;
+        aspect-ratio: 16 / 7;
         max-height: none;
-        height: 100%;
+        height: auto;
         width: 100%;
         background: transparent;
         box-shadow: none;
