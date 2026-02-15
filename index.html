@@ -865,6 +865,12 @@
         padding-bottom: calc(74px + env(safe-area-inset-bottom));
       }
 
+      .app.mobile-theory-scroll .content-shell {
+        overflow: auto;
+        padding-bottom: 0;
+        -webkit-overflow-scrolling: touch;
+      }
+
       #quizSection {
         height: 100%;
         display: flex;
@@ -1062,7 +1068,7 @@
   </style>
 </head>
 <body>
-  <main class="app">
+  <main class="app" id="appRoot">
     <div class="mobile-header-row">
       <button class="mobile-mode-trigger mobile-mode-top hidden" id="mobileModeTop" type="button">Теория</button>
       <h1 class="title" id="question">Загрузка…</h1>
@@ -1098,7 +1104,7 @@
       <button class="hint-btn" id="hintBtn" type="button">Подсказка</button>
     </div>
 
-    <div class="content-shell">
+    <div class="content-shell" id="contentShell">
       <div id="quizSection">
         <div class="fast-options hidden" id="fastOptions">
           <button class="fast-opt-btn active" id="fastOptMinute" type="button">За минуту</button>
@@ -1398,6 +1404,7 @@
     ];
 
     const $question = document.getElementById("question");
+    const $appRoot = document.getElementById("appRoot");
     const $meta = document.getElementById("meta");
     const $answers = document.getElementById("answers");
     const $wrongHint = document.getElementById("wrongHint");
@@ -1909,6 +1916,7 @@
       const fast = mode === "fast";
       const desc = mode === "desc";
       const theory = mode === "theory";
+      const mobile = isMobileViewport();
       $modeFast.classList.toggle("active", fast);
       $modeLearn.classList.toggle("active", mode === "learn");
       $modeDesc.classList.toggle("active", desc);
@@ -1918,6 +1926,7 @@
       $timerPill.classList.toggle("hidden", !fast);
       $quizSection.classList.toggle("hidden", theory);
       $theorySection.classList.toggle("hidden", !theory);
+      $appRoot.classList.toggle("mobile-theory-scroll", mobile && theory);
       syncMobileControls();
       if (!fast) {
         hideFastSummary();
@@ -2260,6 +2269,7 @@
       });
       mobileMediaQuery.addEventListener("change", () => {
         closeMobileModeMenu();
+        $appRoot.classList.toggle("mobile-theory-scroll", isMobileViewport() && mode === "theory");
         syncMobileControls();
       });
       setMode("learn");
