@@ -1077,8 +1077,8 @@
         position: fixed;
         left: calc(6px + env(safe-area-inset-left));
         right: calc(6px + env(safe-area-inset-right));
-        bottom: calc(4px + env(safe-area-inset-bottom));
-        z-index: 10;
+        bottom: calc(58px + env(safe-area-inset-bottom));
+        z-index: 10022;
         margin: 0;
         padding: 6px 8px;
         border-radius: 8px;
@@ -1709,6 +1709,7 @@
     let fastNeedsKickoffTap = false;
     let fastElapsedAnswers = 0;
     let fastTimeLeft = FAST_ROUND_SECONDS;
+    let mobileFastChooserExpanded = false;
     let zoomImages = [];
     let zoomImageIndex = 0;
     let zoomTouchStartX = null;
@@ -1966,13 +1967,15 @@
 
     function closeMobileModeMenu() {
       $mobileModeMenu.classList.add("hidden");
+      mobileFastChooserExpanded = false;
     }
 
     function syncMobileControls() {
       const fast = mode === "fast";
       const mobile = isMobileViewport();
       const theory = mode === "theory";
-      $mobileFastWrap.classList.toggle("hidden", !fast);
+      const showFastChooser = fast || (mobile && mobileFastChooserExpanded);
+      $mobileFastWrap.classList.toggle("hidden", !showFastChooser);
       $mobileHintBtn.classList.toggle("hidden", fast || theory);
       $mobileModeTrigger.classList.toggle("hidden", !mobile);
       $mobileModeTop.classList.add("hidden");
@@ -2227,6 +2230,9 @@
 
     function setMode(nextMode) {
       mode = nextMode;
+      if (mode !== "fast") {
+        mobileFastChooserExpanded = false;
+      }
       fastRunActive = mode === "fast";
       locked = false;
       stopAllFastTimers();
@@ -2544,7 +2550,14 @@
         $mobileModeMenu.classList.toggle("hidden");
       });
       $mobileHintBtn.addEventListener("click", openTheoryModal);
-      $mobileModeFast.addEventListener("click", () => setMode("fast"));
+      $mobileModeFast.addEventListener("click", () => {
+        if (mode === "fast") {
+          if (isMobileViewport()) closeMobileModeMenu();
+          return;
+        }
+        mobileFastChooserExpanded = !mobileFastChooserExpanded;
+        syncMobileControls();
+      });
       $mobileModeLearn.addEventListener("click", () => setMode("learn"));
       $mobileModeDesc.addEventListener("click", () => setMode("desc"));
       $mobileModeTheory.addEventListener("click", () => setMode("theory"));
@@ -2552,10 +2565,16 @@
         event.stopPropagation();
         $mobileModeMenu.classList.toggle("hidden");
       });
-      $mobileFastMinute.addEventListener("click", () => setFastVariant("minute"));
-      $mobileFastClassic.addEventListener("click", () => setFastVariant("classic"));
-      $mobileFastSudden.addEventListener("click", () => setFastVariant("sudden"));
-      $mobileFastSpeed25.addEventListener("click", () => setFastVariant("speed25"));
+      const applyMobileFastVariant = (variant) => {
+        setFastVariant(variant);
+        if (mode !== "fast") {
+          setMode("fast");
+        }
+      };
+      $mobileFastMinute.addEventListener("click", () => applyMobileFastVariant("minute"));
+      $mobileFastClassic.addEventListener("click", () => applyMobileFastVariant("classic"));
+      $mobileFastSudden.addEventListener("click", () => applyMobileFastVariant("sudden"));
+      $mobileFastSpeed25.addEventListener("click", () => applyMobileFastVariant("speed25"));
       $hintBtn.addEventListener("click", openTheoryModal);
       $theoryClose.addEventListener("click", closeTheoryModal);
       $theoryEdgeLeft.addEventListener("click", closeTheoryModal);
@@ -2646,7 +2665,7 @@
       $mobileModeMenu.addEventListener("click", (event) => {
         event.stopPropagation();
       });
-      [$mobileModeFast, $mobileModeLearn, $mobileModeDesc, $mobileModeTheory, $mobileFastMinute, $mobileFastClassic, $mobileFastSudden, $mobileFastSpeed25].forEach((el) => {
+      [$mobileModeLearn, $mobileModeDesc, $mobileModeTheory, $mobileFastMinute, $mobileFastClassic, $mobileFastSudden, $mobileFastSpeed25].forEach((el) => {
         el.addEventListener("click", () => {
           if (isMobileViewport()) closeMobileModeMenu();
         });
