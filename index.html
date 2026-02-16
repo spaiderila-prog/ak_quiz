@@ -936,6 +936,21 @@
         font-size: .76rem;
       }
 
+      .wrong-hint {
+        position: fixed;
+        left: calc(6px + env(safe-area-inset-left));
+        right: calc(6px + env(safe-area-inset-right));
+        bottom: calc(52px + env(safe-area-inset-bottom));
+        z-index: 8;
+        margin: 0;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: .78rem;
+        line-height: 1.25;
+        max-height: min(22dvh, 140px);
+        overflow: auto;
+      }
+
       .pill {
         width: 100%;
         text-align: center;
