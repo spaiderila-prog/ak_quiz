@@ -851,6 +851,32 @@
     .mobile-menu-section.fast {
       border-color: rgba(246,195,73,.45);
       background: rgba(246,195,73,.08);
+      overflow: hidden;
+      max-height: 280px;
+      opacity: 1;
+      transform: translateY(0);
+      transition: max-height .24s ease, opacity .2s ease, transform .24s ease, margin .24s ease, padding .24s ease, border-width .24s ease;
+    }
+
+    .mobile-menu-section.fast.collapsed {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-6px);
+      margin: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-width: 0;
+      pointer-events: none;
+    }
+
+    .mobile-menu-section.fast .fast-options {
+      opacity: 1;
+      transition: opacity .18s ease .04s;
+    }
+
+    .mobile-menu-section.fast.collapsed .fast-options {
+      opacity: 0;
+      transition-delay: 0s;
     }
 
     .mobile-menu-label {
@@ -1296,7 +1322,7 @@
           <button class="mode-btn" id="mobileModeTheory" type="button">Теория</button>
         </div>
       </div>
-      <div class="mobile-menu-section fast hidden" id="mobileFastWrap">
+      <div class="mobile-menu-section fast collapsed" id="mobileFastWrap">
         <p class="mobile-menu-label">Режимы на скорость</p>
         <div class="fast-options">
           <button class="fast-opt-btn" id="mobileFastClassic" type="button">25 из 25</button>
@@ -1975,7 +2001,7 @@
       const mobile = isMobileViewport();
       const theory = mode === "theory";
       const showFastChooser = fast || (mobile && mobileFastChooserExpanded);
-      $mobileFastWrap.classList.toggle("hidden", !showFastChooser);
+      $mobileFastWrap.classList.toggle("collapsed", !showFastChooser);
       $mobileHintBtn.classList.toggle("hidden", fast || theory);
       $mobileModeTrigger.classList.toggle("hidden", !mobile);
       $mobileModeTop.classList.add("hidden");
