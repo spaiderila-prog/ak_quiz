@@ -2012,10 +2012,10 @@
       $mobileModeLearn.classList.toggle("active", mode === "learn");
       $mobileModeDesc.classList.toggle("active", mode === "desc");
       $mobileModeTheory.classList.toggle("active", theory);
-      $mobileFastMinute.classList.toggle("active", fastVariant === "minute");
-      $mobileFastClassic.classList.toggle("active", fastVariant === "classic");
-      $mobileFastSudden.classList.toggle("active", fastVariant === "sudden");
-      $mobileFastSpeed25.classList.toggle("active", fastVariant === "speed25");
+      $mobileFastMinute.classList.toggle("active", fast && fastVariant === "minute");
+      $mobileFastClassic.classList.toggle("active", fast && fastVariant === "classic");
+      $mobileFastSudden.classList.toggle("active", fast && fastVariant === "sudden");
+      $mobileFastSpeed25.classList.toggle("active", fast && fastVariant === "speed25");
       const label = fast
         ? (fastVariantLabelMap[fastVariant] || modeLabelMap.fast)
         : (modeLabelMap[mode] || "Обучающий");
