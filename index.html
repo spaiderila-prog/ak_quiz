@@ -1215,7 +1215,7 @@
         <section class="theory-grid" id="theoryGridMain"></section>
       </div>
       <div class="controls theory-controls hidden" id="theoryControls">
-        <button class="pill mode-pill" id="theoryModeTrigger" type="button">Теория</button>
+        <button class="pill mode-pill" id="theoryModeTrigger" type="button">Выбор режима</button>
       </div>
     </div>
   </main>
@@ -1847,7 +1847,7 @@
       const label = modeLabelMap[mode] || "Обучающий";
       $mobileModeTrigger.textContent = label;
       $mobileModeTop.textContent = label;
-      $theoryModeTrigger.textContent = label;
+      $theoryModeTrigger.textContent = "Выбор режима";
 
       if (mobile) {
         const controls = $scorePill.parentElement;
