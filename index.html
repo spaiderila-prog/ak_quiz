@@ -955,23 +955,21 @@
         flex: 1 1 auto;
         min-height: 0;
         align-content: start;
-        gap: 8px !important;
-        padding: 0 2px;
+        gap: 6px;
+        padding: 0;
         margin-top: -4px;
       }
 
       .card {
-        border-radius: 6px !important;
+        position: relative;
+        border-radius: 5px;
         border: 0;
         aspect-ratio: 16 / 7;
         max-height: none;
         height: auto;
         width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background: #0f1523;
-        overflow: hidden !important;
+        overflow: hidden;
         box-shadow: none;
       }
 
@@ -980,13 +978,14 @@
       }
 
       .card img {
+        position: absolute;
+        inset: 0;
         width: 100%;
-        height: auto;
-        max-width: none;
-        object-fit: unset;
-        object-position: unset;
-        border-radius: inherit;
-        clip-path: inset(0 round 6px);
+        height: 100%;
+        max-width: 100%;
+        object-fit: cover;
+        object-position: center center;
+        border-radius: 0;
         background: linear-gradient(180deg, #141b2a, #0f1523);
         transform: none;
       }
