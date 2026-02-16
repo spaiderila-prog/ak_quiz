@@ -287,12 +287,14 @@
       position: fixed;
       left: calc(10px + env(safe-area-inset-left));
       right: calc(10px + env(safe-area-inset-right));
-      top: calc(10px + env(safe-area-inset-top));
-      bottom: calc(10px + env(safe-area-inset-bottom));
+      top: 50%;
+      transform: translateY(-50%);
+      min-height: min(56vh, 520px);
+      max-height: min(64vh, 620px);
       z-index: 20;
       border: 1px solid rgba(31,157,85,.55);
       border-radius: 16px;
-      background: radial-gradient(circle at 50% 42%, rgba(88, 244, 154, .6) 0%, rgba(31,157,85,.46) 42%, rgba(13,63,39,.92) 100%);
+      background: radial-gradient(circle at 50% 42%, rgba(88, 244, 154, .44) 0%, rgba(31,157,85,.34) 42%, rgba(13,63,39,.72) 100%);
       color: #f3fff8;
       padding: clamp(16px, 4.5vw, 32px);
       text-align: center;
@@ -300,32 +302,39 @@
       flex-direction: column;
       justify-content: center;
       font-family: "Open Sans", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      backdrop-filter: blur(4px);
     }
 
     .fast-summary.ok {
       border-color: rgba(31,157,85,.55);
-      background: radial-gradient(circle at 50% 42%, rgba(88, 244, 154, .62) 0%, rgba(31,157,85,.48) 42%, rgba(13,63,39,.93) 100%);
+      background: radial-gradient(circle at 50% 42%, rgba(88, 244, 154, .45) 0%, rgba(31,157,85,.34) 42%, rgba(13,63,39,.72) 100%);
       color: #f3fff8;
     }
 
     .fast-summary.warn {
       border-color: rgba(246,195,73,.65);
-      background: radial-gradient(circle at 50% 42%, rgba(255, 225, 102, .68) 0%, rgba(228,167,42,.5) 42%, rgba(92,67,18,.92) 100%);
+      background: radial-gradient(circle at 50% 42%, rgba(255, 225, 102, .48) 0%, rgba(228,167,42,.36) 42%, rgba(92,67,18,.72) 100%);
       color: #fff6db;
     }
 
     .fast-summary.bad {
       border-color: rgba(197,48,48,.55);
-      background: radial-gradient(circle at 50% 42%, rgba(232, 79, 79, .66) 0%, rgba(147,39,39,.52) 42%, rgba(63,16,16,.94) 100%);
+      background: radial-gradient(circle at 50% 42%, rgba(232, 79, 79, .48) 0%, rgba(147,39,39,.38) 42%, rgba(63,16,16,.74) 100%);
       color: #ffe7e7;
     }
 
     .fast-summary-title {
-      margin: 0 0 12px;
+      margin: 0 auto 14px;
       font-weight: 900;
-      font-size: clamp(1.45rem, 4.6vw, 2.35rem);
+      font-size: clamp(1.7rem, 5.2vw, 2.8rem);
       line-height: 1.08;
       letter-spacing: .01em;
+      display: inline-block;
+      padding: .3em .55em;
+      border-radius: 12px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.22);
+      backdrop-filter: blur(2px);
     }
 
     .fast-summary-text {
@@ -365,6 +374,15 @@
       font-family: "Open Sans", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
     }
 
+    .fast-summary.ok .fast-summary-btn:not(.secondary),
+    .fast-summary.bad .fast-summary-btn:not(.secondary) {
+      background: rgba(255,255,255,.3);
+      border-color: rgba(255,255,255,.74);
+      color: #10161d;
+      box-shadow: 0 8px 22px rgba(0,0,0,.2);
+      backdrop-filter: blur(8px);
+    }
+
     .fast-summary-btn.secondary {
       background: rgba(140,145,156,.28);
       border-color: rgba(194,198,207,.5);
@@ -377,9 +395,9 @@
     }
 
     .fast-summary.bad .fast-summary-btn:not(.secondary) {
-      background: #fff;
-      border-color: #fff;
-      color: #1a1a1a;
+      background: rgba(255,255,255,.34);
+      border-color: rgba(255,255,255,.82);
+      color: #111;
     }
 
     .fast-summary.bad .fast-summary-btn.secondary {
