@@ -819,7 +819,14 @@
       }
 
       .mobile-mode-top {
-        display: none !important;
+        position: absolute;
+        left: 0;
+        width: auto;
+        min-width: 88px;
+        max-width: 44vw;
+        padding: 6px 10px;
+        font-size: .74rem;
+        z-index: 2;
       }
 
       .mobile-mode-menu {
@@ -949,6 +956,7 @@
         min-height: 0;
         align-content: start;
         gap: 4px;
+        margin-top: -4px;
       }
 
       .card {
@@ -963,6 +971,10 @@
         justify-content: center;
         background: transparent;
         box-shadow: none;
+      }
+
+      .app.mobile-game-mode .title {
+        font-size: clamp(1.24rem, 6.8vw, 1.74rem);
       }
 
       .card img {
@@ -1769,7 +1781,8 @@
       $mobileFastWrap.classList.toggle("hidden", !fast);
       $mobileHintBtn.classList.toggle("hidden", fast || theory);
       $mobileModeTrigger.classList.toggle("hidden", !mobile);
-      $mobileModeTop.classList.add("hidden");
+      $mobileModeTop.classList.toggle("hidden", !(mobile && theory));
+      $mobileModeMenu.classList.toggle("from-top", mobile && theory);
       $roundPill.classList.toggle("hidden", mobile);
       $mobileModeFast.classList.toggle("active", fast);
       $mobileModeLearn.classList.toggle("active", mode === "learn");
@@ -1958,6 +1971,7 @@
       $quizSection.classList.toggle("hidden", theory);
       $theorySection.classList.toggle("hidden", !theory);
       $appRoot.classList.toggle("mobile-theory-scroll", mobile && theory);
+      $appRoot.classList.toggle("mobile-game-mode", mobile && !theory);
       syncMobileControls();
       if (!fast) {
         hideFastSummary();
@@ -2197,6 +2211,10 @@
       $modeDesc.addEventListener("click", () => setMode("desc"));
       $modeTheory.addEventListener("click", () => setMode("theory"));
       $mobileModeTrigger.addEventListener("click", (event) => {
+        event.stopPropagation();
+        $mobileModeMenu.classList.toggle("hidden");
+      });
+      $mobileModeTop.addEventListener("click", (event) => {
         event.stopPropagation();
         $mobileModeMenu.classList.toggle("hidden");
       });
