@@ -1747,13 +1747,11 @@
     let fastElapsedAnswers = 0;
     let fastTimeLeft = FAST_ROUND_SECONDS;
     let mobileFastChooserExpanded = false;
-    let questionRenderToken = 0;
     let zoomImages = [];
     let zoomImageIndex = 0;
     let zoomTouchStartX = null;
     let zoomTouchStartY = null;
     const weaponImageCursor = new Map();
-    const imagePreloadCache = new Map();
     const modeOrder = ["fast", "learn", "desc", "theory"];
     const mobileMediaQuery = window.matchMedia("(max-width: 880px)");
     const modeLabelMap = {
@@ -1806,42 +1804,6 @@
         return weapon.images;
       }
       return [weapon.image];
-    }
-
-    function preloadImage(src) {
-      if (!src) return Promise.resolve();
-      if (imagePreloadCache.has(src)) {
-        return imagePreloadCache.get(src);
-      }
-      const promise = new Promise((resolve) => {
-        const img = new Image();
-        let done = false;
-        const finish = () => {
-          if (done) return;
-          done = true;
-          resolve();
-        };
-        img.onload = finish;
-        img.onerror = finish;
-        img.src = src;
-        if (img.complete) finish();
-      });
-      imagePreloadCache.set(src, promise);
-      return promise;
-    }
-
-    function preloadImages(sources) {
-      const unique = [...new Set((sources || []).filter(Boolean))];
-      if (!unique.length) return Promise.resolve();
-      return Promise.all(unique.map(preloadImage)).then(() => {});
-    }
-
-    function warmupAllQuestionImages() {
-      const allImages = [];
-      for (const weapon of weapons) {
-        allImages.push(...getWeaponImages(weapon));
-      }
-      preloadImages(allImages);
     }
 
     function escapeHtml(text) {
@@ -2520,15 +2482,14 @@
       $overlay.classList.add("show");
     }
 
-    async function nextQuestion() {
+    function nextQuestion() {
       if (mode === "fast" && !fastRunActive) return;
-      locked = true;
+      locked = false;
       stopFastTimer();
       stopFastTimeout();
       if (!(mode === "fast" && fastVariant === "minute" && fastRunActive)) {
         stopFastMinuteTimer();
       }
-      const renderToken = ++questionRenderToken;
       round += 1;
       $round.textContent = String(round);
 
@@ -2544,20 +2505,12 @@
       const optionIndexes = shuffle([correctIndex, ...wrongIndexes]);
 
       const correctWeapon = weapons[correctIndex];
+      currentCorrectIndex = correctIndex;
+      currentCorrectWeapon = correctWeapon;
       const optionImageByIndex = new Map();
       for (const idx of optionIndexes) {
         optionImageByIndex.set(idx, pickWeaponImage(weapons[idx], idx));
       }
-
-      if (mode !== "desc") {
-        const optionSources = optionIndexes.map((idx) => optionImageByIndex.get(idx) || weapons[idx].image);
-        await preloadImages(optionSources);
-        if (renderToken !== questionRenderToken) return;
-        if (mode === "fast" && !fastRunActive) return;
-      }
-
-      currentCorrectIndex = correctIndex;
-      currentCorrectWeapon = correctWeapon;
       currentCorrectImage = optionImageByIndex.get(correctIndex) || "";
       $question.textContent = correctWeapon.name;
       $overlay.classList.remove("show");
@@ -2602,8 +2555,6 @@
         }
       }
 
-      locked = false;
-
       if (mode === "fast") {
         if (fastVariant === "classic" || fastVariant === "sudden") {
           if (fastNeedsKickoffTap) {
@@ -2624,7 +2575,6 @@
       $question.textContent = "Нужно минимум 4 элемента в базе";
     } else {
       buildTheorySection();
-      warmupAllQuestionImages();
       setFastVariant("classic");
       $modeFast.addEventListener("click", () => setMode("fast"));
       $modeLearn.addEventListener("click", () => setMode("learn"));
